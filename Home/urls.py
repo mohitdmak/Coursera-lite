@@ -5,6 +5,8 @@ from . import views as Homeviews
 
 urlpatterns = [
     path('', Homeviews.home, name = 'home'),
+    path('about/', Homeviews.about, name = 'about'),
+    path('accounts/', include('allauth.urls')),
 ]
 
 if settings.DEBUG:
