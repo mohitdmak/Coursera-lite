@@ -1,3 +1,23 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-# Create your models here.
+
+class CreatorProfile(models.Model):
+    creatorusr = models.OneToOneField(User, on_delete = models.CASCADE, related_name = 'creatorprofile')
+    Name = models.CharField(max_length = 200)
+    Email = models.EmailField(max_length = 200)
+    Date_Of_Birth = models.DateField(default = None)
+    City = models.CharField(max_length = 200)
+    State = models.CharField(max_length = 200)
+    Date_Of_Joining = models.DateField(auto_now = True)
+    Educational_Qualification = models.CharField(max_length = 200)
+    Rating = models.IntegerField(default = 3)
+
+class LearnerProfile(models.Model):
+    learnerusr = models.OneToOneField(User, on_delete = models.CASCADE, related_name = 'learnerprofile')
+    Name = models.CharField(max_length = 200)
+    Email = models.EmailField(max_length = 200)
+    Date_Of_Birth = models.DateField(default = None)
+    City = models.CharField(max_length = 200)
+    State = models.CharField(max_length = 200)
+    Date_Of_Joining = models.DateField(auto_now = True)

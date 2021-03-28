@@ -2,49 +2,6 @@
 {% load static %}
 {% block 1 %}
 
-<!-- Start Banner -->
-<div class="ulockd-home-slider">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="pogoSlider" id="js-main-slider">
-                <div class="pogoSlider-slide"><img src="{% static 'Home/images/banner_img.png' %}" alt="#" />
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="slide_text">
-                                    <h3><span span class="theme_color">You only have know one thing</span><br>you can learn anything</h3>
-                                    <h4>Free Educations</h4>
-                                    <br>
-                                    <div class="full center">
-                                        <a class="contact_bt" href="{% static 'Home/courses.html' %}">Start a Course</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="pogoSlider-slide"><img src="{% static 'Home/images/banner_img.png' %}" alt="#" />
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="slide_text">
-                                    <h3><span span class="theme_color">You only have know one thing</span><br>you can learn anything</h3>
-                                    <h4>Free Educations</h4>
-                                    <br>
-                                    <div class="full center">
-                                        <a class="contact_bt" href="{% static 'Home/courses.html' %}">Start a Course</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- .pogoSlider -->
-        </div>
-    </div>
-</div>
-<!-- End Banner -->
 <!-- section -->
 <div class="section tabbar_menu">
    <div class="container">
@@ -52,13 +9,12 @@
           <div class="col-md-12">
              <div class="tab_menu">
                 <ul>
-                   <li><a href="#"><span class="icon"><img src="{% static 'Home/images/i1.png' %}" alt="#" /></span><span>University Life</span></a></li>
+                   <li><a href="#"><span class="icon"><img src="{% static 'Home/images/i1.png' %}" alt="#" /></span><span>University</span></a></li>
                    <li><a href="#"><span class="icon"><img src="{% static 'Home/images/i2.png' %}" alt="#" /></span><span>Graduation</span></a></li>
-                   <li><a href="#"><span class="icon"><img src="{% static 'Home/images/i3.png' %}" alt="#" /></span><span>Athletics</span></a></li>
+                   <li><a href="#"><span class="icon"><img src="{% static 'Home/images/i3.png' %}" alt="#" /></span><span>Sports</span></a></li>
                    <li><a href="#"><span class="icon"><img src="{% static 'Home/images/i4.png' %}" alt="#" /></span><span>Social</span></a></li>
-                   <li><a href="#"><span class="icon"><img src="{% static 'Home/images/i5.png' %}" alt="#" /></span><span>Location</span></a></li>
-                   <li><a href="#"><span class="icon"><img src="{% static 'Home/images/i6.png' %}" alt="#" /></span><span>Call us</span></a></li>
-                   <li><a href="#"><span class="icon"><img src="{% static 'Home/images/i7.png' %}" alt="#" /></span><span>Email</span></a></li>
+                   <li><h1 style="color: white;">We teach everything</h1></li>
+                   <li><a href="#"><span class="icon"><img src="{% static 'Home/images/i7.png' %}" alt="#" /></span><span>Call us</span></a></li>
                 </ul>
              </div>
           </div>
@@ -82,7 +38,7 @@
                       Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
                     </div>
                     <div class="full">
-                       <a class="hvr-radial-out button-theme" href="#">About more</a>
+                       <a class="hvr-radial-out button-theme" href="{% url 'about' %}">About more</a>
                     </div>
                 </div>
             </div>
@@ -95,7 +51,7 @@
     </div>
 </div>
 <!-- end section -->
-<!-- section -->
+<!-- section 
 <div class="section layout_padding">
     <div class="container">
         <div class="row">
@@ -127,7 +83,7 @@
         </div>
     </div>
 </div>
-<!-- end section -->
+ end section -->
 <!-- section -->
 <div class="section margin-top_50 silver_bg">
     <div class="container">
@@ -149,7 +105,9 @@
                       sunt in culpa qui officia deserunt mollit anim id est laborum</p>
                     </div>
                     <div class="full">
-                       <a class="hvr-radial-out button-theme" href="#">Apply</a>
+                        <h1 style="font-family: Verdana, Geneva, Tahoma, sans-serif;"><i><u> Register Below !</u></i></h3>
+                       <button class="hvr-radial-out button-theme">{% include "socialaccount/snippets/provider_list.html" with process="login" %}</button>
+                  
                     </div>
                 </div>
             </div>
@@ -164,7 +122,7 @@
             <div class="col-md-6">
                 <div class="full">
                     <div class="heading_main text_align_left">
-                       <h2><span>Reaserch</span></h2>
+                       <h2><span>Reaserch Our Courses !</span></h2>
                     </div>
                     <div class="full">
                       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
@@ -172,7 +130,7 @@
                       reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
                     </div>
                     <div class="full">
-                       <a class="hvr-radial-out button-theme" href="#">See More</a>
+                       <a class="hvr-radial-out button-theme" href="#">Checkout Navbar!</a>
                     </div>
                 </div>
             </div>
@@ -276,8 +234,8 @@
     <div class="container">
            <div class="row">
              <div class="col-lg-6 col-md-6 col-sm-12">
-                <div class="full float-right_img">
-                    <img src="{% static 'Home/images/img10.png' %}" alt="#">
+                <div class="full float-right_img"><br>
+                    <img src="{% static 'Home/images/images.jpeg' %}" alt="#">
                 </div>
              </div>
              <div class="layout_padding col-lg-6 col-md-6 col-sm-12">

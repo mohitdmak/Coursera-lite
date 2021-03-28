@@ -93,6 +93,58 @@
     </header>
     <!-- End header -->
 
+	<!-- Start Banner -->
+<div class="ulockd-home-slider">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="pogoSlider" id="js-main-slider">
+                <div class="pogoSlider-slide" style="background-image:url('{% static 'Home/images/banner_img.png' %}')">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="slide_text">
+                                    <h3><span span class="theme_color"><b><u>|&MediumSpace;&MediumSpace;&MediumSpace;For&MediumSpace;&MediumSpace;&MediumSpace;&MediumSpace;&MediumSpace;Instructors&MediumSpace;&MediumSpace;&MediumSpace;|</u></b></h3><br><h4>{% if messages %}
+                                        {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }}" id = "log0">
+                                            {{ message }}
+                                            </div>
+                                            {% endfor %}
+                                            {% endif %}</h4></span><h3>YOU CAN TEACH ANYTHING !</h3>
+                                    <div class="full center">
+                                        <a class="contact_bt" href="#">Start a Course</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pogoSlider-slide" style="background-image:url('{% static 'Home/images/banner_img.png' %}');">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="slide_text">
+                                    <h3><span span class="theme_color"><b><u>|&MediumSpace;&MediumSpace;&MediumSpace;For&MediumSpace;&MediumSpace;&MediumSpace;&MediumSpace;&MediumSpace;Students&MediumSpace;&MediumSpace;&MediumSpace;|</u></b></h3><br><h4>{% if messages %}
+                                        {% for message in messages %}
+                                        <div class="alert alert-{{ message.tags }}" id = "log0">
+                                            {{ message }}
+                                            </div>
+                                            {% endfor %}
+                                            {% endif %}</h4></span><h3>YOU CAN LEARN ANYTHING !</h3>
+                                    <div class="full center">
+                                        <a class="contact_bt" href="#">Learn a Course</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- .pogoSlider -->
+        </div>
+    </div>
+</div>
+<!-- End Banner -->
+
     {% block 1 %}
     
 
@@ -107,7 +159,6 @@
 		      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
 			     <div class="footer_blog">
 				    <div class="full margin-bottom_30">
-					   <img src="{% static 'Home/images/footer_logo.png' %}" alt="#" />
 					 </div>
 					 <div class="full white_fonts">
 					    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
@@ -120,11 +171,10 @@
 			       <div class="footer_blog footer_menu white_fonts">
 						    <h3>Quick links</h3>
 						    <ul> 
-							  <li><a href="#">> Join Us</a></li>
-							  <li><a href="#">> Maintenance</a></li>
-							  <li><a href="#">> Language Packs</a></li>
-							  <li><a href="#">> LearnPress</a></li>
-							  <li><a href="#">> Release Status</a></li>
+							  <li><a href="https://www.linkedin.com/in/mohitdmak/">> Our Linkedin</a></li>
+							  <li><a href="https://github.com/mohitdmak/Coursera-lite">> Our Source Code</a></li>
+							  <li><a href="{% url 'home' %}">> Home</a></li>
+							  <li><a href="{% url 'about' %}">> About Us</a></li>
 							</ul>
 						 </div>
 				 </div>
@@ -146,8 +196,8 @@
 				 <div class="footer_blog full white_fonts">
 						     <h3>Contact us</h3>
 							 <ul class="full">
-							   <li><img src="{% static 'Home/images/i5.png' %}"><span>London 145<br>United Kingdom</span></li>
-							   <li><img src="{% static 'Home/images/i6.png' %}"><span>demo@gmail.com</span></li>
+							   <li><img src="{% static 'Home/images/i5.png' %}"><span>Maharashtra<br>INDIA</span></li>
+							   <li><img src="{% static 'Home/images/i6.png' %}"><span>mdmohitrc@gmail.com</span></li>
 							   <li><img src="{% static 'Home/images/i7.png' %}"><span>+12586954775</span></li>
 							 </ul>
 						 </div>
@@ -163,7 +213,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <p class="crp">© Copyrights 2019 design by html.design</p>
+                    <p class="crp">© Copyrights <a href="https://github.com/mohitdmak">@mohitdmak</a></p>
                 </div>
             </div>
         </div>

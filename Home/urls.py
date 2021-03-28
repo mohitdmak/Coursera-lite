@@ -7,6 +7,9 @@ urlpatterns = [
     path('', Homeviews.home, name = 'home'),
     path('about/', Homeviews.about, name = 'about'),
     path('accounts/', include('allauth.urls')),
+    path('register/', Homeviews.register, name = 'register'),
+    path('learner-register/', Homeviews.LearnerRegisterHandler, name = 'learner-register'),
+    path('creator-register/', Homeviews.CreatorRegisterHandler, name = 'creator-register'),
 ]
 
 if settings.DEBUG:
