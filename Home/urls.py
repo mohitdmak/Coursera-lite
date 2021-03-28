@@ -13,6 +13,7 @@ urlpatterns = [
     path('profile/view/<int:pk>/', Homeviews.profile, name = 'seeprofile'),
     path('profile/follow/<int:pk>/', Homeviews.follow, name = 'follow'),
     path('profile/unfollow/<int:pk>/', Homeviews.unfollow, name = 'unfollow'),
+    path('createcourse/', Homeviews.createcourse, name = 'create-course'),
 ]
 
 if settings.DEBUG:
