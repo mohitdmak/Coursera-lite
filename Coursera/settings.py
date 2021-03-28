@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 
-from .secret import DJANGO_SECRET_KEY,  googleoauth2clientid, googleoauth2secret
+from .secret import DJANGO_SECRET_KEY,  googleoauth2clientid, googleoauth2secret, hostemailusername, hostemailpassword
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,7 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.staticfiles',
     'Home.apps.HomeConfig',
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 SITE_ID = 1
 
@@ -142,7 +145,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'register'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -150,3 +153,10 @@ LOGIN_REDIRECT_URL = 'home'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = hostemailusername
+EMAIL_HOST_PASSWORD = hostemailpassword
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
