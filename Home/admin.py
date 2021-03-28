@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import CreatorProfile, LearnerProfile
 
-# Register your models here.
+admin.site.register(CreatorProfile)
+admin.site.register(LearnerProfile)

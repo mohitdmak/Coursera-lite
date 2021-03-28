@@ -10,7 +10,8 @@
                     <form method="POST" enctype="multipart/form-data" >
                         {% csrf_token %}
                         <fieldset class="form-group" >
-                            <legend class="border-bottom mb-400">UPDATE PROFILE INFO</legend><i> (Fields marked with * are required )</i>
+                            <legend class="border-bottom mb-400">UPDATE YOUR CREATOR PROFILE INFO</legend><i> (Fields marked with * are required )</i>
+                            <u><i>Please Enter Birthdate in YYYY-MM-DD format only.</i></u>
                             <br>
                             <br>
                             {{ user_form|crispy }}

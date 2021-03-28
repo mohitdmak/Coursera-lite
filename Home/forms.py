@@ -2,18 +2,14 @@ from django import forms
 from django.db import models
 from .models import CreatorProfile, LearnerProfile
 
-class CreatorRegister(forms.ModelForm):
+class CreatorRegister(forms.Form):
+    Name = forms.CharField(max_length = 200)
+    Email = forms.EmailField(max_length = 200)
     Date_Of_Birth = forms.DateField()
-    class Meta:
-        model = CreatorProfile
-        fields = [
-            'Name',
-            'Email',
-            'Date_Of_Birth',
-            'City',
-            'State',
-            'Educational_Qualification',
-        ]
+    City = forms.CharField(max_length = 200)
+    State = forms.CharField(max_length = 200)
+    Educational_Qualification = forms.CharField(max_length = 200)
+    
 
 class LearnerRegister(forms.ModelForm):
     class Meta:

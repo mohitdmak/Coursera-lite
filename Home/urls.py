@@ -10,6 +10,9 @@ urlpatterns = [
     path('register/', Homeviews.register, name = 'register'),
     path('learner-register/', Homeviews.LearnerRegisterHandler, name = 'learner-register'),
     path('creator-register/', Homeviews.CreatorRegisterHandler, name = 'creator-register'),
+    path('profile/view/<int:pk>/', Homeviews.profile, name = 'seeprofile'),
+    path('profile/follow/<int:pk>/', Homeviews.follow, name = 'follow'),
+    path('profile/unfollow/<int:pk>/', Homeviews.unfollow, name = 'unfollow'),
 ]
 
 if settings.DEBUG:

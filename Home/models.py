@@ -21,3 +21,9 @@ class LearnerProfile(models.Model):
     City = models.CharField(max_length = 200)
     State = models.CharField(max_length = 200)
     Date_Of_Joining = models.DateField(auto_now = True)
+
+class FollowList(models.Model):
+    usertofollow = models.ForeignKey(User,related_name='followed_by',on_delete=models.CASCADE)
+    followings = models.ManyToManyField(User,related_name='followings')
+    def __str__(self):
+        return str(self.usertofollow)
