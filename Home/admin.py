@@ -4,6 +4,7 @@ from .models import CreatorProfile, LearnerProfile, Courses, Modules, ClassroomM
 admin.site.register(CreatorProfile)
 admin.site.register(LearnerProfile)
 admin.site.register(Courses)
+
 admin.site.register(Modules)
 admin.site.register(Reviews)
 admin.site.register(FollowList)
