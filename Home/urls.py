@@ -13,6 +13,18 @@ urlpatterns = [
     path('profile/view/<int:pk>/', Homeviews.profile, name = 'seeprofile'),
     path('profile/follow/<int:pk>/', Homeviews.follow, name = 'follow'),
     path('profile/unfollow/<int:pk>/', Homeviews.unfollow, name = 'unfollow'),
+    path('createcourse/', Homeviews.createcourse, name = 'create-course'),
+    path('mycourses/', Homeviews.mycourses, name = 'mycourses'),
+    path('modulecreation/', Homeviews.modulecreation, name = 'modulecreation'),
+    path('createmodule/course/<int:pk>/', Homeviews.createmodule, name = 'create-module'),
+    path('allcourses/', Homeviews.allcourses, name = 'allcourses'),
+    path('course/details/<int:pk>/', Homeviews.showcourse, name = 'show-course'),
+    path('course/enroll/<int:pk>', Homeviews.enroll, name = 'enroll'),
+    path('course/study/<int:pk>/', Homeviews.studycourse, name = 'study'),
+    path('course/module/<int:pk>/', Homeviews.studymodule, name = 'study-module'),
+    path('course/module/complete/<int:pk>/', Homeviews.completemodule, name = 'complete-module'),
+    path('course/rateandreveiw/<int:pk>/', Homeviews.rateandreview, name = 'rateandreview'),
+    path('search/', Homeviews.searchbytag, name = 'search'),
 ]
 
 if settings.DEBUG:

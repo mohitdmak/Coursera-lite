@@ -66,7 +66,7 @@
                     <ul class="navbar-nav">
                         <li><a class="nav-link active" href="{% url 'home' %}">Home</a></li>
                         <li><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                        <li><a class="nav-link" href="{% static 'Home/courses.html' %}">Courses</a></li>
+                        <li><a class="nav-link" href="{% url 'allcourses' %}">Courses</a></li>
 						{% if user.is_authenticated %}
 						<form method="post" action="{% url 'account_logout' %}">
 							{% csrf_token %}
@@ -79,7 +79,6 @@
 						{% get_providers as socialaccount_providers %}
         				<button style="height: 35px;">{% include "socialaccount/snippets/provider_list.html" with process="login" %}</button>
 						{% endif %}
-						<li><a class="nav-link" href="{% static 'Home/contact.html' %}">Contact us</a></li>
                     </ul>
                 </div>
                 <div class="search-box">
@@ -111,7 +110,7 @@
                                             {% endfor %}
                                             {% endif %}</h4></span><h3>YOU CAN TEACH ANYTHING !</h3>
                                     <div class="full center">
-                                        <a class="contact_bt" href="#">Start a Course</a>
+                                        <a class="contact_bt" href="{% url 'create-course' %}">Start a Course</a>
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +130,7 @@
                                             {% endfor %}
                                             {% endif %}</h4></span><h3>YOU CAN LEARN ANYTHING !</h3>
                                     <div class="full center">
-                                        <a class="contact_bt" href="#">Learn a Course</a>
+                                        <a class="contact_bt" href="{% url 'allcourses' %}">Learn a Course</a>
                                     </div>
                                 </div>
                             </div>
@@ -178,19 +177,6 @@
 							</ul>
 						 </div>
 				 </div>
-				 
-				 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
-				 <div class="footer_blog full white_fonts">
-						     <h3>Newsletter</h3>
-							 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</p>
-							 <div class="newsletter_form">
-							    <form action="index.html">
-								   <input type="email" placeholder="Your Email" name="#" required />
-								   <button>Submit</button>
-								</form>
-							 </div>
-						 </div>
-					</div>	 
 			  
 			  <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
 				 <div class="footer_blog full white_fonts">
