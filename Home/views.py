@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from .forms import CreatorRegisterForm, LearnerRegisterForm, CourseCreationForm
+from .forms import CreatorRegisterForm, LearnerRegisterForm, CourseCreationForm, ModuleCreationForm, RateAndReviewForm, SearchByTag
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import CreatorProfile, LearnerProfile, FollowList, Courses, Modules, Ref, Classroom
+from .models import CreatorProfile, LearnerProfile, FollowList, Courses, Modules, ClassroomModules, Classroom, Reviews, ReviewsCreator, Testimony
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 
@@ -115,9 +115,8 @@ def createcourse(request):
                     Creator = request.user,
                     Course_Tag = course_form.cleaned_data.get('Course_Tag')
                 )
-
                 messages.success(request, 'Congrats! Your Course is now Published !')
-                return redirect('home')
+                return redirect('modulecreation')
         
         else:
             course_form = CourseCreationForm
@@ -125,3 +124,197 @@ def createcourse(request):
     else:
         messages.success(request, 'Sorry, you must be a verified Creator to Launch a Course.')
         return redirect('home')
+
+@login_required()
+def modulecreation(request):
+    if CreatorProfile.objects.filter(creatorusr = request.user).exists():
+        messages.success(request, 'Choose a course to add a module to !')
+        return redirect('mycourses')
+    else:
+        messages.success(request, 'Sorry, you must be a verified Creator to Create a Modulee.')
+        return redirect('home')
+
+@login_required()
+def mycourses(request):
+    if CreatorProfile.objects.filter(creatorusr = request.user).exists():
+        return render(request, 'Home/mycourses.html', {'courses': CreatorProfile.objects.filter(creatorusr = request.user)[0].creatorusr.createdcourses.all()})
+    else:
+        messages.success(request, 'You need to be a verified Creator !')
+        return redirect('home')
+
+
+@login_required()
+def createmodule(request, **kwargs):
+    if CreatorProfile.objects.filter(creatorusr = request.user).exists(): 
+        if(request.method == 'POST'):
+            module_form = ModuleCreationForm(request.POST)
+            if module_form.is_valid():
+                courseid = module_form.cleaned_data.get('Course')
+                modulecourse = Courses.objects.filter(id = kwargs['pk'])[0]
+
+                if modulecourse.Creator == request.user:
+                    moduleno = modulecourse.allmodules.count() + 1
+                    Modules.objects.create(
+                        Title = module_form.cleaned_data.get('Title'),
+                        Content = module_form.cleaned_data.get('Content'),
+                        Course = modulecourse,
+                        index = moduleno,
+                        link = module_form.cleaned_data.get('link')
+                    )
+                    messages.success(request, f'Congrats! You have added modules to course {modulecourse.Course_Name} !')
+                    return redirect('home')
+                
+                else:
+                    messages.success(request, 'You do not have access rights to this course !')
+                    return redirect('create-module')     
+        else:
+            module_form = ModuleCreationForm
+            return render(request, 'Home/CreateModule.html', {'module_form': module_form})
+    
+    else:
+        messages.success(request, 'You must be a verified Creator to add modules !')
+        return redirect('home')
+
+def allcourses(request):
+    return render(request, 'Home/allcourses.html', {'courses': Courses.objects.all()})
+    
+def showcourse(request, **kwargs):
+    coursetoshow = Courses.objects.filter(id = kwargs['pk'])[0]
+    pic = coursetoshow.Creator.socialaccount_set.all()[0].extra_data['picture']
+    if request.user.is_authenticated and Classroom.objects.filter(learners = request.user, courses = coursetoshow).exists():
+        next = 'view'
+    else:
+        next = 'enroll'
+    return render(request, 'Home/ShowCourse.html', {'course': coursetoshow, 'pic': pic, 'next': next})
+
+
+def enroll(request, **kwargs):
+    coursetoenroll = Courses.objects.filter(id = kwargs['pk'])[0]
+    if LearnerProfile.objects.filter(learnerusr = request.user).exists():
+        Classroom.objects.create(learners = request.user, courses = coursetoenroll)
+        for module in coursetoenroll.allmodules.all():
+            ClassroomModules.objects.create(learners = request.user, modules = module)
+        messages.success(request, 'Congrats! You have enrolled for the course!')
+        return redirect('home')
+    else:
+        messages.success(request, 'Being a Creator, You cannot Study Courses !')
+        return redirect('home')
+
+@login_required()
+def studycourse(request, **kwargs):
+    if LearnerProfile.objects.filter(learnerusr = request.user).exists():
+        currentcourse = Courses.objects.filter(id = kwargs['pk'])[0]
+        if Classroom.objects.filter(learners = request.user, courses = currentcourse).exists():
+
+            mainclass = Classroom.objects.filter(learners = request.user, courses = currentcourse)[0]
+            if mainclass.Course_completed == True:
+                check = True
+            else:
+                check = False
+
+            return render(request, 'Home/StudyCourse.html', {'course': currentcourse, 'check': check})
+        else:
+            messages.success(request, 'You need to first enroll for the course!')
+            return redirect('home')
+    else:
+        messages.success(request, 'Being a Creator, You cannot Study Courses !')
+        return redirect('home')
+
+@login_required()
+def studymodule(request, **kwargs):
+    if LearnerProfile.objects.filter(learnerusr = request.user).exists():
+        currentmodule = Modules.objects.filter(id = kwargs['pk'])[0]
+        if Classroom.objects.filter(learners = request.user, courses = currentmodule.Course).exists():
+            classroom = ClassroomModules.objects.filter(learners = request.user, modules = currentmodule)[0]
+            if classroom.completed:
+                check = 'complete'
+            else:
+                check = 'notcomplete'
+            return render(request, 'Home/StudyModule.html', {'module': currentmodule, 'check' : check})
+        else:
+            messages.success(request, 'You must first enroll for the course !')
+            return redirect('home')
+    else:
+        messages.success(request, 'Being a Creator, You cannot Study Courses !')
+        return redirect('home')
+
+def completemodule(request, **kwargs):
+    moduletocomplete = Modules.objects.filter(id = kwargs['pk'])[0]
+    classroom = ClassroomModules.objects.filter(learners = request.user, modules = moduletocomplete)[0]
+    classroom.completed = True
+    classroom.save()
+    messages.success(request, 'Congrats! You have Studied the module !')
+
+    number = 0
+    for module in moduletocomplete.Course.allmodules.all():
+        check = ClassroomModules.objects.filter(learners = request.user, modules = module)[0]
+        if check.completed:
+            number += 1
+
+    if number == moduletocomplete.Course.allmodules.count():
+        messages.success(request, 'Congrats! You have also Completed the Course !!!')
+        mainclass = Classroom.objects.filter(learners = request.user, courses = moduletocomplete.Course)[0]
+        mainclass.Course_completed = True
+        mainclass.save()
+
+        return redirect('rateandreview', pk = moduletocomplete.Course.id)
+
+    return redirect('home')
+
+def rateandreview(request, **kwargs):
+    course = Courses.objects.filter(id = kwargs['pk'])[0]
+    if request.method == 'POST':
+        rate_form = RateAndReviewForm(request.POST)
+        if rate_form.is_valid():
+            creator = CreatorProfile.objects.filter(creatorusr = course.Creator)[0].creatorusr
+
+            rated = int(rate_form.cleaned_data.get('Rate'))
+            Reviews.objects.create(rating = rated, course = course)
+            ratedcreator = int(rate_form.cleaned_data.get('RateCreator'))
+            ReviewsCreator.objects.create(rating = ratedcreator, creator = creator)
+
+            Review = rate_form.cleaned_data.get('Review')
+
+            total = course.reviews.count()
+            totalcreator = creator.creatorrating.count()
+
+            new = 0
+            newcreator = 0
+
+            for x in course.reviews.all():
+                new += x.rating
+            for y in creator.creatorrating.all():
+                newcreator += y.rating
+            
+            course.rating = new/total
+            creator.creatorprofile.rating = newcreator/totalcreator
+
+            course.testimonies.create(testimony = Review)
+            course.save()
+
+            
+            creator.creatorrating.rating = newcreator
+            creator.save()
+
+            messages.success(request, 'Thanks for providing your valuable feedback')
+            return redirect('home')
+    else:
+        rate_form = RateAndReviewForm    
+        return render(request, 'Home/RateAndReview.html', {'rate_form': rate_form})
+
+def searchbytag(request):
+    if request.method == 'POST':
+        search_form = SearchByTag(request.POST)
+
+        if search_form.is_valid():
+            tag = search_form.cleaned_data.get('tag')
+            return render(request, 'Home/searched.html', {'courses': Courses.objects.filter(Course_Tag = tag)})
+
+    else:
+        search_form = SearchByTag
+        totaltags = []
+        for course in Courses.objects.all():
+            totaltags.append(course.Course_Tag)
+
+        searchedtags = set(totaltags)
+        return render(request, 'Home/searchbytag.html', {'search_form': search_form, 'tags': searchedtags})

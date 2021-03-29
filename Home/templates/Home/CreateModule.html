@@ -10,13 +10,13 @@
                     <form method="POST" enctype="multipart/form-data" >
                         {% csrf_token %}
                         <fieldset class="form-group" >
-                            <legend class="border-bottom mb-400">CREATE YOUR MASTER COURSE !</legend><i> (Fields marked with * are required )</i>
+                            <legend class="border-bottom mb-400">CREATE YOUR MASTER MODULES !</legend><i> (Fields marked with * are required )</i>
                             <br>
                             <br>
-                            {{ course_form|crispy }}
+                            {{ module_form|crispy }}
                         </fieldset>
                         <div class="form-group">
-                            <button class="btn btn-outline-success" type="submit">Create and Add Modules !</button>
+                            <button class="btn btn-outline-success" type="submit">Create !</button>
                         </div>
                     </form>
                 </div>

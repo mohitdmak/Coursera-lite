@@ -11,7 +11,7 @@ class CreatorProfile(models.Model):
     State = models.CharField(max_length = 200)
     Date_Of_Joining = models.DateField(auto_now = True)
     Educational_Qualification = models.CharField(max_length = 200)
-    Rating = models.IntegerField(default = 3)
+    rating = models.FloatField(default = 3)
 
 class LearnerProfile(models.Model):
     learnerusr = models.OneToOneField(User, on_delete = models.CASCADE, related_name = 'learnerprofile')
@@ -32,19 +32,34 @@ class Courses(models.Model):
     Course_Name = models.CharField(max_length = 200)
     Course_Desc = models.TextField()
     Creator = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'createdcourses')
-    Course_completed = models.BooleanField(default = False)
     Course_Tag = models.CharField(max_length = 200)
+    rating = models.FloatField(default = 3)
 
 class Modules(models.Model):
     Title = models.CharField(max_length = 200)
     Content = models.TextField()
-    completed = models.BooleanField(default = False)
+    index = models.IntegerField(default = 1)
     Course = models.ForeignKey(Courses, on_delete = models.CASCADE, related_name = 'allmodules')
-    
-class Ref(models.Model):
     link = models.URLField()
-    module = models.ForeignKey(Modules, on_delete = models.CASCADE, related_name = 'references')
 
 class Classroom(models.Model):
     learners = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'classes')
     courses = models.ForeignKey(Courses, on_delete = models.CASCADE, related_name = 'classrooms')
+    Course_completed = models.BooleanField(default = False)
+
+class ClassroomModules(models.Model):
+    learners = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'classesmodules')
+    modules = models.ForeignKey(Modules, on_delete = models.CASCADE, related_name = 'classrooms')
+    completed = models.BooleanField(default = False)
+
+class Reviews(models.Model):
+    rating = models.FloatField(default = 3)
+    course = models.ForeignKey(Courses, on_delete = models.CASCADE, related_name = 'reviews')
+
+class ReviewsCreator(models.Model):
+    rating = models.FloatField(default = 3)
+    creator = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'creatorrating')
+
+class Testimony(models.Model):
+    testimony = models.TextField()
+    course = models.ForeignKey(Courses, on_delete = models.CASCADE, related_name = 'testimonies')
