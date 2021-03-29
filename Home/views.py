@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 
 #send_mail('Welcome to the BITS Community Page','We are glad that you have joined our community. Try to answer any questions that users may post here, and also clear your doubts. \nThis was just an automated test mail to check if you can recieve announcements via mail in future. You can confirm it by replying to this email. \nLOL.\n\n <author> mohitdmak','settings.EMAIL_HOST_USER',list,fail_silently=False)
-        
+
 def home(request):
     return render(request, 'Home/home.html')
 
@@ -117,7 +117,7 @@ def createcourse(request):
                 )
                 messages.success(request, 'Congrats! Your Course is now Published !')
                 return redirect('modulecreation')
-        
+
         else:
             course_form = CourseCreationForm
             return render(request, 'Home/CreateCourse.html', {'course_form': course_form})
@@ -139,13 +139,12 @@ def mycourses(request):
     if CreatorProfile.objects.filter(creatorusr = request.user).exists():
         return render(request, 'Home/mycourses.html', {'courses': CreatorProfile.objects.filter(creatorusr = request.user)[0].creatorusr.createdcourses.all()})
     else:
-        messages.success(request, 'You need to be a verified Creator !')
-        return redirect('home')
+        return render(request, 'Home/mycourse2.html', {'courses': LearnerProfile.objects.filter(learnerusr = request.user)[0].learnerusr.classes.all()})
 
 
 @login_required()
 def createmodule(request, **kwargs):
-    if CreatorProfile.objects.filter(creatorusr = request.user).exists(): 
+    if CreatorProfile.objects.filter(creatorusr = request.user).exists():
         if(request.method == 'POST'):
             module_form = ModuleCreationForm(request.POST)
             if module_form.is_valid():
@@ -163,21 +162,21 @@ def createmodule(request, **kwargs):
                     )
                     messages.success(request, f'Congrats! You have added modules to course {modulecourse.Course_Name} !')
                     return redirect('home')
-                
+
                 else:
                     messages.success(request, 'You do not have access rights to this course !')
-                    return redirect('create-module')     
+                    return redirect('create-module')
         else:
             module_form = ModuleCreationForm
             return render(request, 'Home/CreateModule.html', {'module_form': module_form})
-    
+
     else:
         messages.success(request, 'You must be a verified Creator to add modules !')
         return redirect('home')
 
 def allcourses(request):
     return render(request, 'Home/allcourses.html', {'courses': Courses.objects.all()})
-    
+
 def showcourse(request, **kwargs):
     coursetoshow = Courses.objects.filter(id = kwargs['pk'])[0]
     pic = coursetoshow.Creator.socialaccount_set.all()[0].extra_data['picture']
@@ -285,21 +284,21 @@ def rateandreview(request, **kwargs):
                 new += x.rating
             for y in creator.creatorrating.all():
                 newcreator += y.rating
-            
+
             course.rating = new/total
             creator.creatorprofile.rating = newcreator/totalcreator
 
             course.testimonies.create(testimony = Review)
             course.save()
 
-            
+
             creator.creatorrating.rating = newcreator
             creator.save()
 
             messages.success(request, 'Thanks for providing your valuable feedback')
             return redirect('home')
     else:
-        rate_form = RateAndReviewForm    
+        rate_form = RateAndReviewForm
         return render(request, 'Home/RateAndReview.html', {'rate_form': rate_form})
 
 def searchbytag(request):
