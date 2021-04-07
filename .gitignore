@@ -4,3 +4,4 @@ Coursera/__pycache__
 Home/__pycache__
 Home/migrations
 credentials.json
+db.sqlite3

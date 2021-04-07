@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 class CreatorProfile(models.Model):
     creatorusr = models.OneToOneField(User, on_delete = models.CASCADE, related_name = 'creatorprofile')
+
     Name = models.CharField(max_length = 200)
     Email = models.EmailField(max_length = 200)
     Date_Of_Birth = models.DateField(default = None)
@@ -41,6 +42,7 @@ class Modules(models.Model):
     index = models.IntegerField(default = 1)
     Course = models.ForeignKey(Courses, on_delete = models.CASCADE, related_name = 'allmodules')
     link = models.URLField()
+
 
 class Classroom(models.Model):
     learners = models.ForeignKey(User, on_delete = models.CASCADE, related_name = 'classes')
