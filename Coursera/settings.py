@@ -7,11 +7,11 @@ For more information on this file, see
 https://docs.djangoproject.com/en/3.1/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/3.1/ref/settings/
+https://docs.djangoproject.com/en/3.1/ref/settings/s
 """
 import os
 
-from .secret import DJANGO_SECRET_KEY,  googleoauth2clientid, googleoauth2secret, hostemailusername, hostemailpassword
+from .secret import DJANGO_SECRET_KEY,  googleoauth2clientid, googleoauth2secret, hostemailusername, hostemailpassword, sendgridapikey
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,7 +27,7 @@ SECRET_KEY = DJANGO_SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mohitdmakbits.pythonanywhere.com','localhost', '127.0.0.1','128.199.18.11', 'www.mohitdmak.me', 'mohitdmak.me']
 
 
 # Application definition
@@ -88,8 +88,12 @@ WSGI_APPLICATION = 'Coursera.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'coursera',
+        'USER': 'mdmakpg',
+        'PASSWORD': '11235813',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -145,6 +149,8 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+
+
 LOGIN_REDIRECT_URL = 'register'
 
 
@@ -152,10 +158,12 @@ LOGIN_REDIRECT_URL = 'register'
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
+
+SENDGRID_API_KEY = sendgridapikey
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_HOST_USER = hostemailusername
 EMAIL_HOST_PASSWORD = hostemailpassword
 EMAIL_USE_TLS = True
