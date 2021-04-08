@@ -5,8 +5,12 @@ from django.contrib.auth.models import User
 from .models import CreatorProfile, LearnerProfile, FollowList, Courses, Modules, ClassroomModules, Classroom, Reviews, ReviewsCreator, Testimony
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from .secret import hostemailusername
+import os
+from sendgrid import SendGridAPIClient
+from django.conf import settings
+from sendgrid.helpers.mail import Mail
 
-#send_mail('Welcome to the BITS Community Page','We are glad that you have joined our community. Try to answer any questions that users may post here, and also clear your doubts. \nThis was just an automated test mail to check if you can recieve announcements via mail in future. You can confirm it by replying to this email. \nLOL.\n\n <author> mohitdmak','settings.EMAIL_HOST_USER',list,fail_silently=False)
 
 def home(request):
     return render(request, 'Home/home.html')
@@ -18,9 +22,22 @@ def register(request):
     if(CreatorProfile.objects.filter(creatorusr = request.user).exists() or LearnerProfile.objects.filter(learnerusr = request.user).exists()):
         messages.success(request, 'Welcome Back !')
         return redirect('home')
+
     messages.success(request, 'Choose one path below and Register ! ')
     list = [request.user.email]
-    send_mail('Welcome to Coursera - Lite !','We are glad that you have joined our community.\n Make Sure to choose a path out of Creator/Learner and complete your profile in order to use the site further.\n This was just an automated test mail to check if you can recieve announcements via mail in future. You can confirm it by replying to this email.\n\n <author> mohitdmak','settings.EMAIL_HOST_USER',list,fail_silently=False)
+    
+    message = Mail(
+    from_email=hostemailusername,
+    to_emails=list,
+    subject='Hello And Welcome Aboard!',
+    html_content='<strong>You now belong to our community</strong>We are glad that you have joined our community. Make Sure to choose a path out of Creator/Learner and complete your profile in order to use the site further. This was just an automated test mail to check if you can recieve announcements via mail in future. You can confirm it by replying to this email.')
+
+    try:
+        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+        response = sg.send(message)
+        print(response.status_code)
+    except Exception as e:
+        print(e.message)
 
     return render(request, 'Home/register.html')
 
@@ -57,6 +74,7 @@ def LearnerRegisterHandler(request):
         messages.success(request,f'Please complete the verification below !')
         return render(request, 'Home/Learner_Register.html', context)
 
+
 def profile(request, **kwargs):
     if User.objects.filter(id = kwargs['pk']).exists():
         usr = User.objects.filter(id = kwargs['pk'])[0]
@@ -69,12 +87,15 @@ def profile(request, **kwargs):
                     foll = 'f'
                 return render(request, 'Home/cprofile.html', {'profile': usr.creatorprofile, 'foll': foll, 'pic': pic})
             return render(request, 'Home/cprofile.html', {'profile': usr.creatorprofile, 'pic': pic})
-        else:
+        elif LearnerProfile.objects.filter(learnerusr = usr).exists():
             pic = usr.socialaccount_set.all()[0].extra_data['picture']
             return render(request, 'Home/lprofile.html', {'profile' : usr.learnerprofile, 'pic': pic})
+        else:
+            return redirect('register')
     else:
         messages.success(request,f'The requested User profile does not exist :(')
         return redirect('home')
+
 
 @login_required(redirect_field_name = 'register')
 def follow(request, **kwargs):
@@ -82,6 +103,7 @@ def follow(request, **kwargs):
     request.user.followings.create(usertofollow = usr)
     messages.success(request, f'You are now following {usr.creatorprofile.Name} !')
     return redirect('seeprofile', pk = usr.id)
+
 
 def unfollow(request, **kwargs):
     usr = User.objects.filter(id = kwargs['pk'])[0]
@@ -106,7 +128,20 @@ def createcourse(request):
                 list = []
                 for learners in request.user.followed_by.all():
                     list.append(learners.followings.all()[0].email)
-                send_mail(f'Creator {request.user.creatorprofile.Name} has created a New Course !',f'You recieved this mail because you follow the Creator : {request.user.creatorprofile.Name}.\n You can unsubscribe by unfollowing the creator. \n\n <author> mohitdmak','settings.EMAIL_HOST_USER',list,fail_silently=False)
+                
+                if len(list) != 0:
+                    message = Mail(
+                        from_email=hostemailusername,
+                        to_emails=list,
+                        subject='Hello And Welcome Aboard!',
+                        html_content='<strong>You now belong to our community</strong>We are glad that you have joined our community. Make Sure to choose a path out of Creator/Learner and complete your profile in order to use the site further. This was just an automated test mail to check if you can recieve announcements via mail in future. You can confirm it by replying to this email.')
+
+                    try:
+                        sg = SendGridAPIClient(settings.SENDGRID_API_KEY)
+                        response = sg.send(message)
+                        print(response.status_code)
+                    except Exception as e:
+                        print(e.message)
 
                 return redirect('modulecreation')
 
@@ -117,6 +152,7 @@ def createcourse(request):
         messages.success(request, 'Sorry, you must be a verified Creator to Launch a Course.')
         return redirect('home')
 
+
 @login_required(redirect_field_name = 'register')
 def modulecreation(request):
     if CreatorProfile.objects.filter(creatorusr = request.user).exists():
@@ -125,6 +161,7 @@ def modulecreation(request):
     else:
         messages.success(request, 'Sorry, you must be a verified Creator to Create a Modulee.')
         return redirect('home')
+
 
 @login_required(redirect_field_name = 'register')
 def mycourses(request):
@@ -160,8 +197,10 @@ def createmodule(request, **kwargs):
         messages.success(request, 'You must be a verified Creator to add modules !')
         return redirect('home')
 
+
 def allcourses(request):
     return render(request, 'Home/allcourses.html', {'courses': Courses.objects.all()})
+
 
 def showcourse(request, **kwargs):
     coursetoshow = Courses.objects.filter(id = kwargs['pk'])[0]
@@ -185,6 +224,7 @@ def enroll(request, **kwargs):
         messages.success(request, 'Being a Creator, You cannot Study Courses !')
         return redirect('home')
 
+
 @login_required(redirect_field_name = 'register')
 def studycourse(request, **kwargs):
     if LearnerProfile.objects.filter(learnerusr = request.user).exists():
@@ -205,6 +245,7 @@ def studycourse(request, **kwargs):
         messages.success(request, 'Being a Creator, You cannot Study Courses !')
         return redirect('home')
 
+
 @login_required(redirect_field_name = 'register')
 def studymodule(request, **kwargs):
     if LearnerProfile.objects.filter(learnerusr = request.user).exists():
@@ -222,6 +263,7 @@ def studymodule(request, **kwargs):
     else:
         messages.success(request, 'Being a Creator, You cannot Study Courses !')
         return redirect('home')
+
 
 def completemodule(request, **kwargs):
     moduletocomplete = Modules.objects.filter(id = kwargs['pk'])[0]
@@ -245,6 +287,7 @@ def completemodule(request, **kwargs):
         return redirect('rateandreview', pk = moduletocomplete.Course.id)
 
     return redirect('study', pk = moduletocomplete.Course.id)
+
 
 def rateandreview(request, **kwargs):
     course = Courses.objects.filter(id = kwargs['pk'])[0]
