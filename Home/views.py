@@ -86,7 +86,7 @@ def createplaylist(request):
                 return redirect('songcreation')
         else:
             playlist_form = PlaylistCreationForm()
-            return render(request, 'Home/CreatePlaylist.html', {'course_form': playlist_form})
+            return render(request, 'Home/CreatePlaylist.html', {'playlist_form': playlist_form})
     else:
         messages.success(request, 'Sorry, you must be a verified User to Launch a Playlist.')
         return redirect('home')
