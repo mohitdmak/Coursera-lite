@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import fields
 from .models import Profile, Playlists, Songs, FollowList
 
+
 class RegisterForm(forms.ModelForm):
     class Meta:
         model = Profile
@@ -11,6 +12,8 @@ class RegisterForm(forms.ModelForm):
             'Email',
             'Bio'
         ]
+
+
 """
 class LearnerRegisterForm(forms.ModelForm):
     class Meta:
@@ -24,6 +27,7 @@ class LearnerRegisterForm(forms.ModelForm):
         ]
 """
 
+
 class PlaylistCreationForm(forms.ModelForm):
     class Meta:
         model = Playlists
@@ -32,6 +36,7 @@ class PlaylistCreationForm(forms.ModelForm):
             'Playlist_Desc'
         ]
 
+
 class SongCreationForm(forms.ModelForm):
     class Meta:
         model = Songs
@@ -39,6 +44,8 @@ class SongCreationForm(forms.ModelForm):
             'Title',
             'link'
         ]
+
+
 """
 class RateAndReviewForm(forms.Form):
     ratechoices = [(0,'0'), (1,'1'), (2,'2'), (3,'3'), (4,'4'), (5,'5')]

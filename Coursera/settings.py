@@ -27,7 +27,8 @@ SECRET_KEY = DJANGO_SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['mohitdmakbits.pythonanywhere.com','mohitdmak.me','www.mohitdmak.me','localhost']
+ALLOWED_HOSTS = ['mohitdmakbits.pythonanywhere.com',
+                 'mohitdmak.me', 'www.mohitdmak.me', 'localhost']
 
 
 # Application definition
@@ -164,4 +165,3 @@ EMAIL_HOST_USER = hostemailusername
 EMAIL_HOST_PASSWORD = hostemailpassword
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-
