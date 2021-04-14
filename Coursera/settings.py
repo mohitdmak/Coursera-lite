@@ -12,9 +12,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
-from .secret import (DJANGO_SECRET_KEY, googleoauth2clientid,
-                     googleoauth2secret, hostemailpassword, hostemailusername,
-                     sendgridapikey)
+from .secret import DJANGO_SECRET_KEY
+from .secret import googleoauth2clientid
+from .secret import googleoauth2secret
+from .secret import hostemailpassword
+from .secret import hostemailusername
+from .secret import sendgridapikey
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
