@@ -7,11 +7,7 @@ from .models import Profile, Playlists, Songs, FollowList
 class RegisterForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = [
-            'Name',
-            'Email',
-            'Bio'
-        ]
+        fields = ["Name", "Email", "Bio"]
 
 
 """
@@ -31,19 +27,13 @@ class LearnerRegisterForm(forms.ModelForm):
 class PlaylistCreationForm(forms.ModelForm):
     class Meta:
         model = Playlists
-        fields = [
-            'Playlist_Name',
-            'Playlist_Desc'
-        ]
+        fields = ["Playlist_Name", "Playlist_Desc"]
 
 
 class SongCreationForm(forms.ModelForm):
     class Meta:
         model = Songs
-        fields = [
-            'Title',
-            'link'
-        ]
+        fields = ["Title", "link"]
 
 
 """
