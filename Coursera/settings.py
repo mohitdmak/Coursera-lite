@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 
-from .secret import DJANGO_SECRET_KEY,  googleoauth2clientid, googleoauth2secret, hostemailusername, hostemailpassword
+from .secret import DJANGO_SECRET_KEY,  googleoauth2clientid, googleoauth2secret, hostemailusername, hostemailpassword, sendgridapikey
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,7 +27,7 @@ SECRET_KEY = DJANGO_SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['mohitdmakbits.pythonanywhere.com','localhost']
+ALLOWED_HOSTS = ['mohitdmakbits.pythonanywhere.com','mohitdmak.me','www.mohitdmak.me','localhost']
 
 
 # Application definition
@@ -88,11 +88,11 @@ WSGI_APPLICATION = 'Coursera.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mohitdmakbits$newnew',
-        'HOST': 'mohitdmakbits.mysql.pythonanywhere-services.com',
-        'USER': 'mohitdmakbits',
-        'PASSWORD': 'Mdmakmysql#11235813@',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'spotify',
+        'HOST': 'localhost',
+        'USER': 'mdmakpg',
+        'PASSWORD': '11235813',
     }
 }
 
@@ -158,8 +158,10 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SENDGRID_API_KEY = sendgridapikey
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = hostemailusername
 EMAIL_HOST_PASSWORD = hostemailpassword
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+
