@@ -1,5 +1,5 @@
 // Core javascript helper functions
-'use strict';
+"use strict";
 
 // quickElement(tagType, parentReference [, textInChildNode, attribute,
 // attributeValue ...]);
@@ -58,71 +58,73 @@ function findPosY(obj) {
 // Date object extensions
 // ----------------------------------------------------------------------------
 {
-  Date.prototype.getTwelveHours =
-      function() { return this.getHours() % 12 || 12; };
-
-  Date.prototype.getTwoDigitMonth = function() {
-    return (this.getMonth() < 9) ? '0' + (this.getMonth() + 1)
-                                 : (this.getMonth() + 1);
+  Date.prototype.getTwelveHours = function () {
+    return this.getHours() % 12 || 12;
   };
 
-  Date.prototype.getTwoDigitDate = function() {
-    return (this.getDate() < 10) ? '0' + this.getDate() : this.getDate();
+  Date.prototype.getTwoDigitMonth = function () {
+    return this.getMonth() < 9
+      ? "0" + (this.getMonth() + 1)
+      : this.getMonth() + 1;
   };
 
-  Date.prototype.getTwoDigitTwelveHour = function() {
-    return (this.getTwelveHours() < 10) ? '0' + this.getTwelveHours()
-                                        : this.getTwelveHours();
+  Date.prototype.getTwoDigitDate = function () {
+    return this.getDate() < 10 ? "0" + this.getDate() : this.getDate();
   };
 
-  Date.prototype.getTwoDigitHour = function() {
-    return (this.getHours() < 10) ? '0' + this.getHours() : this.getHours();
+  Date.prototype.getTwoDigitTwelveHour = function () {
+    return this.getTwelveHours() < 10
+      ? "0" + this.getTwelveHours()
+      : this.getTwelveHours();
   };
 
-  Date.prototype.getTwoDigitMinute = function() {
-    return (this.getMinutes() < 10) ? '0' + this.getMinutes()
-                                    : this.getMinutes();
+  Date.prototype.getTwoDigitHour = function () {
+    return this.getHours() < 10 ? "0" + this.getHours() : this.getHours();
   };
 
-  Date.prototype.getTwoDigitSecond = function() {
-    return (this.getSeconds() < 10) ? '0' + this.getSeconds()
-                                    : this.getSeconds();
+  Date.prototype.getTwoDigitMinute = function () {
+    return this.getMinutes() < 10 ? "0" + this.getMinutes() : this.getMinutes();
   };
 
-  Date.prototype.getAbbrevMonthName = function() {
+  Date.prototype.getTwoDigitSecond = function () {
+    return this.getSeconds() < 10 ? "0" + this.getSeconds() : this.getSeconds();
+  };
+
+  Date.prototype.getAbbrevMonthName = function () {
     return typeof window.CalendarNamespace === "undefined"
-               ? this.getTwoDigitMonth()
-               : window.CalendarNamespace.monthsOfYearAbbrev[this.getMonth()];
+      ? this.getTwoDigitMonth()
+      : window.CalendarNamespace.monthsOfYearAbbrev[this.getMonth()];
   };
 
-  Date.prototype.getFullMonthName = function() {
+  Date.prototype.getFullMonthName = function () {
     return typeof window.CalendarNamespace === "undefined"
-               ? this.getTwoDigitMonth()
-               : window.CalendarNamespace.monthsOfYear[this.getMonth()];
+      ? this.getTwoDigitMonth()
+      : window.CalendarNamespace.monthsOfYear[this.getMonth()];
   };
 
-  Date.prototype.strftime = function(format) {
+  Date.prototype.strftime = function (format) {
     const fields = {
-      b : this.getAbbrevMonthName(),
-      B : this.getFullMonthName(),
-      c : this.toString(),
-      d : this.getTwoDigitDate(),
-      H : this.getTwoDigitHour(),
-      I : this.getTwoDigitTwelveHour(),
-      m : this.getTwoDigitMonth(),
-      M : this.getTwoDigitMinute(),
-      p : (this.getHours() >= 12) ? 'PM' : 'AM',
-      S : this.getTwoDigitSecond(),
-      w : '0' + this.getDay(),
-      x : this.toLocaleDateString(),
-      X : this.toLocaleTimeString(),
-      y : ('' + this.getFullYear()).substr(2, 4),
-      Y : '' + this.getFullYear(),
-      '%' : '%'
+      b: this.getAbbrevMonthName(),
+      B: this.getFullMonthName(),
+      c: this.toString(),
+      d: this.getTwoDigitDate(),
+      H: this.getTwoDigitHour(),
+      I: this.getTwoDigitTwelveHour(),
+      m: this.getTwoDigitMonth(),
+      M: this.getTwoDigitMinute(),
+      p: this.getHours() >= 12 ? "PM" : "AM",
+      S: this.getTwoDigitSecond(),
+      w: "0" + this.getDay(),
+      x: this.toLocaleDateString(),
+      X: this.toLocaleTimeString(),
+      y: ("" + this.getFullYear()).substr(2, 4),
+      Y: "" + this.getFullYear(),
+      "%": "%",
     };
-    let result = '', i = 0;
+    let result = "",
+      i = 0;
     while (i < format.length) {
-      if (format.charAt(i) === '%') {
+      if (format.charAt(i) === "%") {
         result = result + fields[format.charAt(i + 1)];
         ++i;
       } else {
@@ -136,32 +138,32 @@ function findPosY(obj) {
   // ----------------------------------------------------------------------------
   // String object extensions
   // ----------------------------------------------------------------------------
-  String.prototype.strptime = function(format) {
+  String.prototype.strptime = function (format) {
     const split_format = format.split(/[.\-/]/);
     const date = this.split(/[.\-/]/);
     let i = 0;
     let day, month, year;
     while (i < split_format.length) {
       switch (split_format[i]) {
-      case "%d":
-        day = date[i];
-        break;
-      case "%m":
-        month = date[i] - 1;
-        break;
-      case "%Y":
-        year = date[i];
-        break;
-      case "%y":
-        // A %y value in the range of [00, 68] is in the current
-        // century, while [69, 99] is in the previous century,
-        // according to the Open Group Specification.
-        if (parseInt(date[i], 10) >= 69) {
+        case "%d":
+          day = date[i];
+          break;
+        case "%m":
+          month = date[i] - 1;
+          break;
+        case "%Y":
           year = date[i];
-        } else {
-          year = (new Date(Date.UTC(date[i], 0))).getUTCFullYear() + 100;
-        }
-        break;
+          break;
+        case "%y":
+          // A %y value in the range of [00, 68] is in the current
+          // century, while [69, 99] is in the previous century,
+          // according to the Open Group Specification.
+          if (parseInt(date[i], 10) >= 69) {
+            year = date[i];
+          } else {
+            year = new Date(Date.UTC(date[i], 0)).getUTCFullYear() + 100;
+          }
+          break;
       }
       ++i;
     }
