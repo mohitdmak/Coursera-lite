@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
-from .forms import RegisterForm, PlaylistCreationForm, SongCreationForm
 from django.contrib import messages
-from django.contrib.auth.models import User
-from .models import Profile, FollowList, Playlists, Songs
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.shortcuts import redirect, render
+
+from .forms import PlaylistCreationForm, RegisterForm, SongCreationForm
+from .models import FollowList, Playlists, Profile, Songs
 
 # send_mail('Welcome to the BITS Community Page','We are glad that you have joined our community. Try to answer any questions that users may post here, and also clear your doubts. \nThis was just an automated test mail to check if you can recieve announcements via mail in future. You can confirm it by replying to this email. \nLOL.\n\n <author> mohitdmak','settings.EMAIL_HOST_USER',list,fail_silently=False)
 

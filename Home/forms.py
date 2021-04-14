@@ -1,7 +1,8 @@
 from django import forms
 from django.db import models
 from django.db.models import fields
-from .models import Profile, Playlists, Songs, FollowList
+
+from .models import FollowList, Playlists, Profile, Songs
 
 
 class RegisterForm(forms.ModelForm):
