@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from .forms import CreatorRegisterForm, LearnerRegisterForm, CourseCreationForm, ModuleCreationForm, RateAndReviewForm, SearchByTag
+from .forms import RegisterForm, PlaylistCreationForm, SongCreationForm
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import CreatorProfile, LearnerProfile, FollowList, Courses, Modules, ClassroomModules, Classroom, Reviews, ReviewsCreator, Testimony
+from .models import Profile, FollowList, Playlists, Songs
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 
@@ -15,63 +15,41 @@ def about(request):
     return render(request, 'Home/about.html')
 
 def register(request):
-    if(CreatorProfile.objects.filter(creatorusr = request.user).exists() or LearnerProfile.objects.filter(learnerusr = request.user).exists()):
+    if(Profile.objects.filter(user = request.user).exists()):
         messages.success(request, 'Welcome Back !')
         return redirect('home')
-    messages.success(request, 'Choose one path below and Register ! ')
-    list = [request.user.email]
-    send_mail('Welcome to Coursera - Lite !','We are glad that you have joined our community.\n Make Sure to choose a path out of Creator/Learner and complete your profile in order to use the site further.\n This was just an automated test mail to check if you can recieve announcements via mail in future. You can confirm it by replying to this email.\n\n <author> mohitdmak','settings.EMAIL_HOST_USER',list,fail_silently=False)
-
-    return render(request, 'Home/register.html')
-
-def CreatorRegisterHandler(request):
-    if request.method == 'POST':
-        user_form=CreatorRegisterForm(request.POST)
-
-        if user_form.is_valid():
-            user_form.instance.creatorusr = request.user
-            user_form.save()
-            username = user_form.cleaned_data.get('Name')
-            messages.success(request,f'CONGRATS {username} !, Your Creator profile is now created!')
-            return redirect("home")
     else:
-        user_form = CreatorRegisterForm()
-        context={'user_form':user_form}
-        messages.success(request,f'Please complete the verification below !')
-        return render(request, 'Home/Creator_Register.html', context)
-
-
-def LearnerRegisterHandler(request):
-    if request.method == 'POST':
-        user_form = LearnerRegisterForm(request.POST)
-
-        if user_form.is_valid():
-            user_form.instance.learnerusr = request.user
-            user_form.save()
-            username = user_form.cleaned_data.get('Name')
-            messages.success(request,f'CONGRATS {username} !, Your Learner profile is now created!')
-            return redirect("home")
-    else:
-        user_form = LearnerRegisterForm()
-        context={'user_form':user_form}
-        messages.success(request,f'Please complete the verification below !')
-        return render(request, 'Home/Learner_Register.html', context)
+        if request.method == 'POST':
+            user_form = RegisterForm(request.POST)
+            if user_form.is_valid():
+                user_form.instance.user = request.user
+                user_form.save()
+                username = user_form.cleaned_data.get('Name')
+                messages.success(request,f'CONGRATS {username} !, Your Creator profile is now created!')
+                list = [request.user.email]
+                send_mail('Welcome to Coursera - Lite !','We are glad that you have joined our community.\n Make Sure to choose a path out of Creator/Learner and complete your profile in order to use the site further.\n This was just an automated test mail to check if you can recieve announcements via mail in future. You can confirm it by replying to this email.\n\n <author> mohitdmak','settings.EMAIL_HOST_USER',list,fail_silently=False)
+                return redirect("home")
+        else:
+            user_form = RegisterForm()
+            context={'user_form':user_form}
+            messages.success(request,f'Please complete the verification below !')
+            return render(request, 'Home/Register.html', context)
 
 def profile(request, **kwargs):
     if User.objects.filter(id = kwargs['pk']).exists():
-        usr = User.objects.filter(id = kwargs['pk'])[0]
-        if CreatorProfile.objects.filter(creatorusr = usr).exists():
-            pic = usr.socialaccount_set.all()[0].extra_data['picture']
+        requesteduser = User.objects.filter(id = kwargs['pk'])[0]
+        if Profile.objects.filter(user = requesteduser).exists():
+            pic = requesteduser.socialaccount_set.all()[0].extra_data['picture']
             if request.user.is_authenticated:
-                if(FollowList.objects.filter(followings = request.user, usertofollow = usr).exists()):
+                if(FollowList.objects.filter(followings = request.user, usertofollow = requesteduser).exists()):
                     foll = 'u'
                 else:
                     foll = 'f'
-                return render(request, 'Home/cprofile.html', {'profile': usr.creatorprofile, 'foll': foll, 'pic': pic})
-            return render(request, 'Home/cprofile.html', {'profile': usr.creatorprofile, 'pic': pic})
+                return render(request, 'Home/profile.html', {'profile': requesteduser.profile, 'foll': foll, 'pic': pic})
+            return render(request, 'Home/profile.html', {'profile': requesteduser.profile, 'pic': pic})
         else:
-            pic = usr.socialaccount_set.all()[0].extra_data['picture']
-            return render(request, 'Home/lprofile.html', {'profile' : usr.learnerprofile, 'pic': pic})
+            messages.success(request,f'The requested User profile does not exist :(')
+            return redirect('home')
     else:
         messages.success(request,f'The requested User profile does not exist :(')
         return redirect('home')
@@ -80,7 +58,7 @@ def profile(request, **kwargs):
 def follow(request, **kwargs):
     usr = User.objects.filter(id = kwargs['pk'])[0]
     request.user.followings.create(usertofollow = usr)
-    messages.success(request, f'You are now following {usr.creatorprofile.Name} !')
+    messages.success(request, f'You are now following {usr.profile.Name} !')
     return redirect('seeprofile', pk = usr.id)
 
 def unfollow(request, **kwargs):
@@ -88,91 +66,78 @@ def unfollow(request, **kwargs):
     todelete = request.user.followings.filter(usertofollow = usr)
     todelete.delete()
     request.user.save()
-    messages.success(request, f'You are now unfollowing {usr.creatorprofile.Name} !')
+    messages.success(request, f'You are now unfollowing {usr.profile.Name} !')
     return redirect('seeprofile', pk = usr.id)
 
 
 @login_required(redirect_field_name = 'register')
-def createcourse(request):
-    if CreatorProfile.objects.filter(creatorusr = request.user).exists():
+def createplaylist(request):
+    if Profile.objects.filter(user = request.user).exists():
         if(request.method == 'POST'):
-            course_form = CourseCreationForm(request.POST)
-
-            if course_form.is_valid():
-                course_form.instance.Creator = request.user
-                course_form.save()
-                messages.success(request, 'Congrats! Your Course is now Published !')
-
+            playlist_form = PlaylistCreationForm(request.POST)
+            if playlist_form.is_valid():
+                playlist_form.instance.Creator = request.user
+                playlist_form.save()
+                messages.success(request, 'Congrats! Your Playlist is now Published !')
                 list = []
-                for learners in request.user.followed_by.all():
-                    list.append(learners.followings.all()[0].email)
-                send_mail(f'Creator {request.user.creatorprofile.Name} has created a New Course !',f'You recieved this mail because you follow the Creator : {request.user.creatorprofile.Name}.\n You can unsubscribe by unfollowing the creator. \n\n <author> mohitdmak','settings.EMAIL_HOST_USER',list,fail_silently=False)
-
-                return redirect('modulecreation')
-
+                for followers in request.user.followed_by.all():
+                    list.append(followers.followings.all()[0].email)
+                send_mail(f'Creator {request.user.profile.Name} has created a New Course !',f'You recieved this mail because you follow the Creator : {request.user.profile.Name}.\n You can unsubscribe by unfollowing the creator. \n\n <author> mohitdmak','settings.EMAIL_HOST_USER',list,fail_silently=False)
+                return redirect('songcreation')
         else:
-            course_form = CourseCreationForm()
-            return render(request, 'Home/CreateCourse.html', {'course_form': course_form})
+            playlist_form = PlaylistCreationForm()
+            return render(request, 'Home/CreatePlaylist.html', {'course_form': playlist_form})
     else:
-        messages.success(request, 'Sorry, you must be a verified Creator to Launch a Course.')
+        messages.success(request, 'Sorry, you must be a verified User to Launch a Playlist.')
         return redirect('home')
 
 @login_required(redirect_field_name = 'register')
-def modulecreation(request):
-    if CreatorProfile.objects.filter(creatorusr = request.user).exists():
-        messages.success(request, 'Choose a course to add a module to !')
-        return redirect('mycourses')
+def songcreation(request):
+    if Profile.objects.filter(user = request.user).exists():
+        messages.success(request, 'Choose a Playlist to add a module to !')
+        return redirect('myplaylists')
     else:
-        messages.success(request, 'Sorry, you must be a verified Creator to Create a Modulee.')
+        messages.success(request, 'Sorry, you must be a verified User to Create a Song.')
         return redirect('home')
 
 @login_required(redirect_field_name = 'register')
-def mycourses(request):
-    if CreatorProfile.objects.filter(creatorusr = request.user).exists():
-        return render(request, 'Home/mycourses.html', {'courses': CreatorProfile.objects.filter(creatorusr = request.user)[0].creatorusr.createdcourses.all()})
+def myplaylists(request):
+    if Profile.objects.filter(user = request.user).exists():
+        return render(request, 'Home/myplaylists.html', {'playlists': request.user.createdplaylists.all()})
     else:
-        return render(request, 'Home/mycourse2.html', {'courses': LearnerProfile.objects.filter(learnerusr = request.user)[0].learnerusr.classes.all(), 'usr':request.user})
-
+        messages.success(request, 'Sorry, you must be a verified User to Create a Playlists.')
+        return redirect('home')
 
 @login_required(redirect_field_name = 'register')
-def createmodule(request, **kwargs):
-    if CreatorProfile.objects.filter(creatorusr = request.user).exists():
+def createsong(request, **kwargs):
+    if Profile.objects.filter(user = request.user).exists():
         if(request.method == 'POST'):
-            module_form = ModuleCreationForm(request.POST)
-            if module_form.is_valid():
-                modulecourse = Courses.objects.filter(id = kwargs['pk'])[0]
-
-                if modulecourse.Creator == request.user:
-                    moduleno = modulecourse.allmodules.count() + 1
-                    module_form.instance.Course = modulecourse
-                    module_form.instance.index = moduleno
-                    module_form.save()
-                    messages.success(request, f'Congrats! You have added modules to course {modulecourse.Course_Name} !')
-                    return redirect('mycourses')
+            song_form = SongCreationForm(request.POST)
+            if song_form.is_valid():
+                songplaylist = Playlists.objects.filter(id = kwargs['pk'])[0]
+                if songplaylist.Creator == request.user:
+                    song_form.instance.Playlist = songplaylist
+                    song_form.save()
+                    messages.success(request, f'Congrats! You have added a song to playlist {songplaylist.Playlist_Name} !')
+                    return redirect('myplaylists')
                 else:
                     messages.success(request, 'You do not have access rights to this course !')
-                    return redirect('modulecreation')
+                    return redirect('songcreation')
         else:
-            module_form = ModuleCreationForm()
-            return render(request, 'Home/CreateModule.html', {'module_form': module_form})
-
+            song_form = SongCreationForm()
+            return render(request, 'Home/CreateSong.html', {'song_form': song_form})
     else:
-        messages.success(request, 'You must be a verified Creator to add modules !')
+        messages.success(request, 'You must be a verified User to add songs !')
         return redirect('home')
 
-def allcourses(request):
-    return render(request, 'Home/allcourses.html', {'courses': Courses.objects.all()})
+def allplaylists(request):
+    return render(request, 'Home/allplaylists.html', {'playlists': Playlists.objects.all()})
 
-def showcourse(request, **kwargs):
-    coursetoshow = Courses.objects.filter(id = kwargs['pk'])[0]
-    pic = coursetoshow.Creator.socialaccount_set.all()[0].extra_data['picture']
-    if request.user.is_authenticated and Classroom.objects.filter(learners = request.user, courses = coursetoshow).exists():
-        next = 'view'
-    else:
-        next = 'enroll'
-    return render(request, 'Home/ShowCourse.html', {'course': coursetoshow, 'pic': pic, 'next': next})
-
-
+def showplaylist(request, **kwargs):
+    playlisttoshow = Playlists.objects.filter(id = kwargs['pk'])[0]
+    pic = playlisttoshow.Creator.socialaccount_set.all()[0].extra_data['picture']
+    return render(request, 'Home/ShowPlaylist.html', {'playlist': playlisttoshow, 'pic': pic})
+"""
 def enroll(request, **kwargs):
     coursetoenroll = Courses.objects.filter(id = kwargs['pk'])[0]
     if LearnerProfile.objects.filter(learnerusr = request.user).exists():
@@ -203,26 +168,15 @@ def studycourse(request, **kwargs):
             return redirect('show-course', pk = currentcourse.id)
     else:
         messages.success(request, 'Being a Creator, You cannot Study Courses !')
-        return redirect('home')
+        return redirect('home')"""
 
 @login_required(redirect_field_name = 'register')
-def studymodule(request, **kwargs):
-    if LearnerProfile.objects.filter(learnerusr = request.user).exists():
-        currentmodule = Modules.objects.filter(id = kwargs['pk'])[0]
-        if Classroom.objects.filter(learners = request.user, courses = currentmodule.Course).exists():
-            classroom = ClassroomModules.objects.filter(learners = request.user, modules = currentmodule)[0]
-            if classroom.completed:
-                check = 'complete'
-            else:
-                check = 'notcomplete'
-            return render(request, 'Home/StudyModule.html', {'module': currentmodule, 'check' : check})
-        else:
-            messages.success(request, 'You must first enroll for the course !')
-            return redirect('show-course', pk = currentmodule.Course.id)
-    else:
-        messages.success(request, 'Being a Creator, You cannot Study Courses !')
-        return redirect('home')
-
+def showsong(request, **kwargs):
+    currentsong = Songs.objects.filter(id = kwargs['pk'])[0]
+    currentsong.plays += 1
+    currentsong.save()
+    return render(request, 'Home/PlaySong.html', {'song': currentsong})
+"""
 def completemodule(request, **kwargs):
     moduletocomplete = Modules.objects.filter(id = kwargs['pk'])[0]
     classroom = ClassroomModules.objects.filter(learners = request.user, modules = moduletocomplete)[0]
@@ -283,7 +237,7 @@ def rateandreview(request, **kwargs):
     else:
         rate_form = RateAndReviewForm
         return render(request, 'Home/RateAndReview.html', {'rate_form': rate_form})
-
+"""
 
 def searchbytag(request):
     if request.method == 'POST':

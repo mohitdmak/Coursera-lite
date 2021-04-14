@@ -1,20 +1,17 @@
 from django import forms
 from django.db import models
 from django.db.models import fields
-from .models import CreatorProfile, LearnerProfile, Courses, Modules, Classroom, Reviews, FollowList, ClassroomModules
+from .models import Profile, Playlists, Songs, FollowList
 
-class CreatorRegisterForm(forms.ModelForm):
+class RegisterForm(forms.ModelForm):
     class Meta:
-        model = CreatorProfile
+        model = Profile
         fields = [
             'Name',
             'Email',
-            'Date_Of_Birth',
-            'City',
-            'State',
-            'Educational_Qualification'
+            'Bio'
         ]
-
+"""
 class LearnerRegisterForm(forms.ModelForm):
     class Meta:
         model = LearnerProfile
@@ -25,26 +22,24 @@ class LearnerRegisterForm(forms.ModelForm):
             'City',
             'State'
         ]
+"""
 
-
-class CourseCreationForm(forms.ModelForm):
+class PlaylistCreationForm(forms.ModelForm):
     class Meta:
-        model = Courses
+        model = Playlists
         fields = [
-            'Course_Name',
-            'Course_Desc',
-            'Course_Tag'
+            'Playlist_Name',
+            'Playlist_Desc'
         ]
 
-class ModuleCreationForm(forms.ModelForm):
+class SongCreationForm(forms.ModelForm):
     class Meta:
-        model = Modules
+        model = Songs
         fields = [
             'Title',
-            'Content',
             'link'
         ]
-    
+"""
 class RateAndReviewForm(forms.Form):
     ratechoices = [(0,'0'), (1,'1'), (2,'2'), (3,'3'), (4,'4'), (5,'5')]
     RateCreator = forms.CharField(label = 'Rate the instructor out of 5 (On the Basis of the ease with you understood the concepts) : ', widget = forms.Select(choices = ratechoices))
@@ -52,4 +47,4 @@ class RateAndReviewForm(forms.Form):
     Review = forms.CharField(widget = forms.Textarea)
 
 class SearchByTag(forms.Form):
-    tag = forms.CharField(max_length = 200)
+    tag = forms.CharField(max_length = 200)"""

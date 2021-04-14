@@ -66,10 +66,9 @@
                     <ul class="navbar-nav">
                         <li><a class="nav-link active" href="{% url 'home' %}">Home</a></li>
                         <li><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                        <li><a class="nav-link" href="{% url 'allcourses' %}">Courses</a></li>
-                        <li><a class="nav-link" href="{% url 'search' %}">Search By Tag</a></li>
+                        <li><a class="nav-link" href="{% url 'allplaylists' %}">Playlists</a></li>
 						{% if user.is_authenticated %}
-                        <li><a class="nav-link" href="{% url 'mycourses' %}">My courses</a></li>
+                        <li><a class="nav-link" href="{% url 'myplaylists' %}">My Playlists</a></li>
                         <li><a class="nav-link" href="{% url 'seeprofile' user.id %}">My Profile</a></li>
 						<form method="post" action="{% url 'account_logout' %}">
 							{% csrf_token %}
@@ -105,9 +104,9 @@
                                             {{ message }}
                                             </div>
                                             {% endfor %}
-                                            {% endif %}</h4></span><h3>YOU CAN TEACH ANYTHING !</h3>
+                                            {% endif %}</h4></span><h3>YOU CAN LISTEN TO ANYTHING !</h3>
                                     <div class="full center">
-                                        <a class="contact_bt" href="{% url 'create-course' %}">Start a Course</a>
+                                        <a class="contact_bt" href="{% url 'create-playlist' %}">Start a Playlist</a>
                                     </div>
                                 </div>
                             </div>
@@ -125,9 +124,9 @@
                                             {{ message }}
                                             </div>
                                             {% endfor %}
-                                            {% endif %}</h4></span><h3>YOU CAN LEARN ANYTHING !</h3>
+                                            {% endif %}</h4></span><h3>YOU CAN LISTEN TO ANYTHING !</h3>
                                     <div class="full center">
-                                        <a class="contact_bt" href="{% url 'allcourses' %}">Learn a Course</a>
+                                        <a class="contact_bt" href="{% url 'allplaylists' %}">Listen to a playlist</a>
                                     </div>
                                 </div>
                             </div>

@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'Coursera.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mohitdmakbits$new',
+        'NAME': 'mohitdmakbits$newnew',
         'HOST': 'mohitdmakbits.mysql.pythonanywhere-services.com',
         'USER': 'mohitdmakbits',
         'PASSWORD': 'Mdmakmysql#11235813@',
