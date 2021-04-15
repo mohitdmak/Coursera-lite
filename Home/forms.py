@@ -1,16 +1,19 @@
 from django import forms
 from django.db import models
 from django.db.models import fields
-from .models import Profile, Playlists, Songs, FollowList
+
+from .models import FollowList
+from .models import Playlists
+from .models import Profile
+from .models import Songs
+
 
 class RegisterForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = [
-            'Name',
-            'Email',
-            'Bio'
-        ]
+        fields = ["Name", "Email", "Bio"]
+
+
 """
 class LearnerRegisterForm(forms.ModelForm):
     class Meta:
@@ -24,21 +27,19 @@ class LearnerRegisterForm(forms.ModelForm):
         ]
 """
 
+
 class PlaylistCreationForm(forms.ModelForm):
     class Meta:
         model = Playlists
-        fields = [
-            'Playlist_Name',
-            'Playlist_Desc'
-        ]
+        fields = ["Playlist_Name", "Playlist_Desc"]
+
 
 class SongCreationForm(forms.ModelForm):
     class Meta:
         model = Songs
-        fields = [
-            'Title',
-            'link'
-        ]
+        fields = ["Title", "link"]
+
+
 """
 class RateAndReviewForm(forms.Form):
     ratechoices = [(0,'0'), (1,'1'), (2,'2'), (3,'3'), (4,'4'), (5,'5')]
