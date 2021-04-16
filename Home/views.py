@@ -133,6 +133,9 @@ def createsong(request, **kwargs):
 def allplaylists(request):
     return render(request, 'Home/allplaylists.html', {'playlists': Playlists.objects.all()})
 
+def allsongs(request):
+    return render(request, 'Home/allsongs.html', {'songs': Songs.objects.filter(isprivate = False)})
+
 def showplaylist(request, **kwargs):
     playlisttoshow = Playlists.objects.filter(id = kwargs['pk'])[0]
     pic = playlisttoshow.Creator.socialaccount_set.all()[0].extra_data['picture']

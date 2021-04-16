@@ -18,6 +18,7 @@ urlpatterns = [
     path('songcreation/', Homeviews.songcreation, name = 'songcreation'),
     path('createsong/Playlist/<int:pk>/', Homeviews.createsong, name = 'create-song'),
     path('allplaylists/', Homeviews.allplaylists, name = 'allplaylists'),
+    path('allsongs/', Homeviews.allsongs, name = 'allsongs'),
     path('Playlist/details/<int:pk>/', Homeviews.showplaylist, name = 'show-playlist'),
     #path('course/enroll/<int:pk>', Homeviews.enroll, name = 'enroll'),
     #path('course/study/<int:pk>/', Homeviews.studycourse, name = 'study'),
