@@ -11,7 +11,7 @@
                         {% csrf_token %}
                         <fieldset class="form-group" >
                             <legend class="border-bottom mb-400">CREATE YOUR OWN SONGS !</legend><i> (Fields marked with * are required )</i>
-                            <br>
+                            <br><u><i>Please enter the duration as integer (closest) minutes.</i></u>
                             <br>
                             {{ song_form|crispy }}
                         </fieldset>

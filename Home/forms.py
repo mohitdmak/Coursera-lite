@@ -37,7 +37,9 @@ class SongCreationForm(forms.ModelForm):
         model = Songs
         fields = [
             'Title',
-            'link'
+            'link',
+            'Singer',
+            'Duration'
         ]
 """
 class RateAndReviewForm(forms.Form):
