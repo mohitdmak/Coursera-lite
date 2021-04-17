@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 {
-  const toggleNavSidebar = document.getElementById('toggle-nav-sidebar');
+  const toggleNavSidebar = document.getElementById("toggle-nav-sidebar");
   if (toggleNavSidebar !== null) {
-    const navLinks = document.querySelectorAll('#nav-sidebar a');
+    const navLinks = document.querySelectorAll("#nav-sidebar a");
     function disableNavLinkTabbing() {
       for (const navLink of navLinks) {
         navLink.tabIndex = -1;
@@ -14,27 +14,28 @@
       }
     }
 
-    const main = document.getElementById('main');
-    let navSidebarIsOpen =
-        localStorage.getItem('django.admin.navSidebarIsOpen');
+    const main = document.getElementById("main");
+    let navSidebarIsOpen = localStorage.getItem(
+      "django.admin.navSidebarIsOpen"
+    );
     if (navSidebarIsOpen === null) {
-      navSidebarIsOpen = 'true';
+      navSidebarIsOpen = "true";
     }
-    if (navSidebarIsOpen === 'false') {
+    if (navSidebarIsOpen === "false") {
       disableNavLinkTabbing();
     }
-    main.classList.toggle('shifted', navSidebarIsOpen === 'true');
+    main.classList.toggle("shifted", navSidebarIsOpen === "true");
 
-    toggleNavSidebar.addEventListener('click', function() {
-      if (navSidebarIsOpen === 'true') {
-        navSidebarIsOpen = 'false';
+    toggleNavSidebar.addEventListener("click", function () {
+      if (navSidebarIsOpen === "true") {
+        navSidebarIsOpen = "false";
         disableNavLinkTabbing();
       } else {
-        navSidebarIsOpen = 'true';
+        navSidebarIsOpen = "true";
         enableNavLinkTabbing();
       }
-      localStorage.setItem('django.admin.navSidebarIsOpen', navSidebarIsOpen);
-      main.classList.toggle('shifted');
+      localStorage.setItem("django.admin.navSidebarIsOpen", navSidebarIsOpen);
+      main.classList.toggle("shifted");
     });
   }
 }
