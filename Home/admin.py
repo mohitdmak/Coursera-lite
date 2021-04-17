@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Profile, Playlists, Songs, FollowList
+
+from .models import FollowList, Playlists, Profile, Songs
 
 admin.site.register(Profile)
 # admin.site.register(LearnerProfile)
