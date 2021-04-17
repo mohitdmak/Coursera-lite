@@ -24,13 +24,11 @@ class LearnerRegisterForm(forms.ModelForm):
         ]
 """
 
-class PlaylistCreationForm(forms.ModelForm):
-    class Meta:
-        model = Playlists
-        fields = [
-            'Playlist_Name',
-            'Playlist_Desc'
-        ]
+class PlaylistCreationForm(forms.Form):    
+        choices = [(True,'Yes'),(False, 'No')]
+        isPrivate = forms.CharField(label = 'Would you like to keep your playlist private ? : ', widget = forms.Select(choices = choices))
+        Name_Of_Playlist = forms.CharField(max_length = 200)
+        Playlist_Description = forms.CharField(widget = forms.Textarea)
 
 class SongCreationForm(forms.ModelForm):
     class Meta:
@@ -38,7 +36,6 @@ class SongCreationForm(forms.ModelForm):
         fields = [
             'Title',
             'link',
-            'Singer',
             'Duration'
         ]
 """

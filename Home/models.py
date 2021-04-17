@@ -24,10 +24,8 @@ class Playlists(models.Model):
 
 class Songs(models.Model):
     Title = models.CharField(max_length = 200)
-    Singer = models.CharField(max_length = 200)
-    duration = models.IntegerField(default = 3)
-    isprivate = models.BooleanField(default = False)
     plays = models.IntegerField(default = 1)
     Playlist = models.ForeignKey(Playlists, on_delete = models.CASCADE, related_name = 'allsongs')
     link = models.URLField()
-    Creator = models.OneToOneField(User, on_delete = models.CASCADE, related_name = 'createdsongs')
+    Duration = models.IntegerField(default = 3)
+    Singer = models.CharField(max_length = 200)

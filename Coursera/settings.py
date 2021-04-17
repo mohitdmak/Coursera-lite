@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'Coursera.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spotify',
+        'NAME': 'newspotify',
         'HOST': 'localhost',
         'USER': 'mdmakpg',
         'PASSWORD': '11235813',

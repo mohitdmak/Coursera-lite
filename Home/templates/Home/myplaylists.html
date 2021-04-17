@@ -7,9 +7,14 @@
         <div class="row" style="margin-left: 5cm;">
              <div class="col-lg-6 col-md-6 col-sm-12">
                 <div>
-                    <h1 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;font-size: xx-large"><u><b>My Created Courses  :-</b></u></h1><hr><br>
+                    <h1 style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;font-size: xx-large"><u><b>My Created Playlists  :-</b></u></h1><hr><br>
                     {% for playlist in playlists %}
-                    <h1 style="font-family: Georgia, 'Times New Roman', Times, serif;"><b><i>{{ playlist.Playlist_Name }} ~ </i></b><br><b><u><a href = "{% url 'create-song' playlist.id %}"><button class="btn btn-outline-success" type="submit">Add a Song</button></a></u></b></h1><hr><br>
+                    <h1 style="font-family: Georgia, 'Times New Roman', Times, serif;"><b><i>{{ playlist.Playlist_Name }} ~ </i></b><br><b><u><a href = "{% url 'create-song' playlist.id %}"><button class="btn btn-outline-success" type="submit">Add a Song</button></a></u></b>
+                    {% if playlist.isprivate %}
+                    <b><u><a href = "{% url 'makepublic' playlist.id %}"><button class="btn btn-outline-success" type="submit">Make Public</button></a></u></b>
+                    {% else %}
+                    <b><u><a href = "{% url 'makeprivate' playlist.id %}"><button class="btn btn-outline-danger" type="submit">Make Private</button></a></u></b>
+                    {% endif %}</h1><hr><br>
                     {% endfor %}
                 </div>
             </div>

@@ -56,7 +56,7 @@
     <header class="top-header">
         <nav class="navbar header-nav navbar-expand-lg">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{% url 'home' %}"><h2 style="font-family:cursive"><u>Welcome to Lite-Version of Coursera</u></h2></a>
+                <a class="navbar-brand" href="{% url 'home' %}"><h2 style="font-family:cursive"><u>Welcome to Spotify - Lite !</u></h2></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-wd" aria-controls="navbar-wd" aria-expanded="false" aria-label="Toggle navigation">
                     <span></span>
                     <span></span>
@@ -64,11 +64,13 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbar-wd">
                     <ul class="navbar-nav">
-                        <li><a class="nav-link active" href="{% url 'home' %}">Home</a></li>
-                        <li><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                        <li><a class="nav-link active" href="{% url 'allusers' %}">All Users</a></li>
+                        
+                        <li><a class="nav-link" href="{% url 'allsongs' %}">Songs</a></li>
                         <li><a class="nav-link" href="{% url 'allplaylists' %}">Playlists</a></li>
 						{% if user.is_authenticated %}
                         <li><a class="nav-link" href="{% url 'myplaylists' %}">My Playlists</a></li>
+                        <li><a class="nav-link active" href="{% url 'feed' %}">Feed</a></li>
                         <li><a class="nav-link" href="{% url 'seeprofile' user.id %}">My Profile</a></li>
 						<form method="post" action="{% url 'account_logout' %}">
 							{% csrf_token %}

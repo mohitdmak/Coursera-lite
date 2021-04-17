@@ -69,6 +69,8 @@ def unfollow(request, **kwargs):
     messages.success(request, f'You are now unfollowing {usr.profile.Name} !')
     return redirect('seeprofile', pk = usr.id)
 
+def allusers(request):
+    return render(request, 'Home/allusers.html', {'users': User.objects.all()})
 
 @login_required(redirect_field_name = 'register')
 def createplaylist(request):
@@ -76,9 +78,14 @@ def createplaylist(request):
         if(request.method == 'POST'):
             playlist_form = PlaylistCreationForm(request.POST)
             if playlist_form.is_valid():
-                playlist_form.instance.Creator = request.user
-                playlist_form.save()
-                messages.success(request, 'Congrats! Your Playlist is now Published !')
+                what = playlist_form.cleaned_data.get('isPrivate')
+                Playlists.objects.create(
+                    Playlist_Name = playlist_form.cleaned_data.get('Name_Of_Playlist'),
+                    Playlist_Desc = playlist_form.cleaned_data.get('Playlist_Description'),
+                    isprivate = playlist_form.cleaned_data.get('isPrivate'),
+                    Creator = request.user
+                )
+                messages.success(request, f'Congrats! Your Playlist is now Published !')
                 list = []
                 for followers in request.user.followed_by.all():
                     list.append(followers.followings.all()[0].email)
@@ -109,6 +116,22 @@ def myplaylists(request):
         return redirect('home')
 
 @login_required(redirect_field_name = 'register')
+def makeprivate(request, **kwargs):
+    playlist = Playlists.objects.filter(id = kwargs['pk'])[0]
+    playlist.isprivate = True
+    playlist.save()
+    messages.success(request, 'You have made your playlist Private !')
+    return redirect('myplaylists')
+
+@login_required(redirect_field_name = 'register')
+def makepublic(request, **kwargs):
+    playlist = Playlists.objects.filter(id = kwargs['pk'])[0]
+    playlist.isprivate = False
+    playlist.save()
+    messages.success(request, 'You have made your playlist Public !')
+    return redirect('myplaylists')
+
+@login_required(redirect_field_name = 'register')
 def createsong(request, **kwargs):
     if Profile.objects.filter(user = request.user).exists():
         if(request.method == 'POST'):
@@ -130,11 +153,19 @@ def createsong(request, **kwargs):
         messages.success(request, 'You must be a verified User to add songs !')
         return redirect('home')
 
+@login_required(redirect_field_name = 'register')
+def feed(request):
+    feed = []
+    for usermodel in request.user.followings.all():
+        for playlist in usermodel.usertofollow.createdplaylists.all():
+            feed.append(playlist)
+    return render(request, 'Home/feed.html', {'playlists': feed})
+
 def allplaylists(request):
-    return render(request, 'Home/allplaylists.html', {'playlists': Playlists.objects.all()})
+    return render(request, 'Home/allplaylists.html', {'playlists': Playlists.objects.filter(isprivate = False)})
 
 def allsongs(request):
-    return render(request, 'Home/allsongs.html', {'songs': Songs.objects.filter(isprivate = False)})
+    return render(request, 'Home/allsongs.html', {'songs': Songs.objects.all()})
 
 def showplaylist(request, **kwargs):
     playlisttoshow = Playlists.objects.filter(id = kwargs['pk'])[0]
