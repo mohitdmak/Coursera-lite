@@ -19,13 +19,21 @@ urlpatterns = [
     path("createplaylist/", Homeviews.createplaylist, name="create-playlist"),
     path("myplaylists/", Homeviews.myplaylists, name="myplaylists"),
     path("songcreation/", Homeviews.songcreation, name="songcreation"),
-    path("createsong/Playlist/<int:pk>/", Homeviews.createsong, name="create-song"),
+    path("createsong/Playlist/<int:pk>/",
+         Homeviews.createsong,
+         name="create-song"),
     path("feed/", Homeviews.feed, name="feed"),
     path("allplaylists/", Homeviews.allplaylists, name="allplaylists"),
     path("allsongs/", Homeviews.allsongs, name="allsongs"),
-    path("Playlist/makepublic/<int:pk>/", Homeviews.makepublic, name="makepublic"),
-    path("Playlist/makeprivate/<int:pk>/", Homeviews.makeprivate, name="makeprivate"),
-    path("Playlist/details/<int:pk>/", Homeviews.showplaylist, name="show-playlist"),
+    path("Playlist/makepublic/<int:pk>/",
+         Homeviews.makepublic,
+         name="makepublic"),
+    path("Playlist/makeprivate/<int:pk>/",
+         Homeviews.makeprivate,
+         name="makeprivate"),
+    path("Playlist/details/<int:pk>/",
+         Homeviews.showplaylist,
+         name="show-playlist"),
     # path('course/enroll/<int:pk>', Homeviews.enroll, name = 'enroll'),
     # path('course/study/<int:pk>/', Homeviews.studycourse, name = 'study'),
     path("Playlist/Song/<int:pk>/", Homeviews.showsong, name="show-song"),
@@ -35,4 +43,5 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

@@ -51,7 +51,8 @@ def register(request):
         else:
             user_form = RegisterForm()
             context = {"user_form": user_form}
-            messages.success(request, f"Please complete the verification below !")
+            messages.success(request,
+                             f"Please complete the verification below !")
             return render(request, "Home/Register.html", context)
 
 
@@ -59,29 +60,39 @@ def profile(request, **kwargs):
     if User.objects.filter(id=kwargs["pk"]).exists():
         requesteduser = User.objects.filter(id=kwargs["pk"])[0]
         if Profile.objects.filter(user=requesteduser).exists():
-            pic = requesteduser.socialaccount_set.all()[0].extra_data["picture"]
+            pic = requesteduser.socialaccount_set.all(
+            )[0].extra_data["picture"]
             if request.user.is_authenticated:
                 if FollowList.objects.filter(
-                    followings=request.user, usertofollow=requesteduser
-                ).exists():
+                        followings=request.user,
+                        usertofollow=requesteduser).exists():
                     foll = "u"
                 else:
                     foll = "f"
                 return render(
                     request,
                     "Home/profile.html",
-                    {"profile": requesteduser.profile, "foll": foll, "pic": pic},
+                    {
+                        "profile": requesteduser.profile,
+                        "foll": foll,
+                        "pic": pic
+                    },
                 )
             return render(
                 request,
                 "Home/profile.html",
-                {"profile": requesteduser.profile, "pic": pic},
+                {
+                    "profile": requesteduser.profile,
+                    "pic": pic
+                },
             )
         else:
-            messages.success(request, f"The requested User profile does not exist :(")
+            messages.success(request,
+                             f"The requested User profile does not exist :(")
             return redirect("home")
     else:
-        messages.success(request, f"The requested User profile does not exist :(")
+        messages.success(request,
+                         f"The requested User profile does not exist :(")
         return redirect("home")
 
 
@@ -114,14 +125,15 @@ def createplaylist(request):
             if playlist_form.is_valid():
                 what = playlist_form.cleaned_data.get("isPrivate")
                 Playlists.objects.create(
-                    Playlist_Name=playlist_form.cleaned_data.get("Name_Of_Playlist"),
+                    Playlist_Name=playlist_form.cleaned_data.get(
+                        "Name_Of_Playlist"),
                     Playlist_Desc=playlist_form.cleaned_data.get(
-                        "Playlist_Description"
-                    ),
+                        "Playlist_Description"),
                     isprivate=playlist_form.cleaned_data.get("isPrivate"),
                     Creator=request.user,
                 )
-                messages.success(request, f"Congrats! Your Playlist is now Published !")
+                messages.success(
+                    request, f"Congrats! Your Playlist is now Published !")
                 list = []
                 for followers in request.user.followed_by.all():
                     list.append(followers.followings.all()[0].email)
@@ -135,13 +147,12 @@ def createplaylist(request):
                 return redirect("songcreation")
         else:
             playlist_form = PlaylistCreationForm()
-            return render(
-                request, "Home/CreatePlaylist.html", {"playlist_form": playlist_form}
-            )
+            return render(request, "Home/CreatePlaylist.html",
+                          {"playlist_form": playlist_form})
     else:
         messages.success(
-            request, "Sorry, you must be a verified User to Launch a Playlist."
-        )
+            request,
+            "Sorry, you must be a verified User to Launch a Playlist.")
         return redirect("home")
 
 
@@ -152,8 +163,7 @@ def songcreation(request):
         return redirect("myplaylists")
     else:
         messages.success(
-            request, "Sorry, you must be a verified User to Create a Song."
-        )
+            request, "Sorry, you must be a verified User to Create a Song.")
         return redirect("home")
 
 
@@ -167,8 +177,8 @@ def myplaylists(request):
         )
     else:
         messages.success(
-            request, "Sorry, you must be a verified User to Create a Playlists."
-        )
+            request,
+            "Sorry, you must be a verified User to Create a Playlists.")
         return redirect("home")
 
 
@@ -207,12 +217,13 @@ def createsong(request, **kwargs):
                     return redirect("myplaylists")
                 else:
                     messages.success(
-                        request, "You do not have access rights to this course !"
-                    )
+                        request,
+                        "You do not have access rights to this course !")
                     return redirect("songcreation")
         else:
             song_form = SongCreationForm()
-            return render(request, "Home/CreateSong.html", {"song_form": song_form})
+            return render(request, "Home/CreateSong.html",
+                          {"song_form": song_form})
     else:
         messages.success(request, "You must be a verified User to add songs !")
         return redirect("home")
@@ -236,15 +247,18 @@ def allplaylists(request):
 
 
 def allsongs(request):
-    return render(request, "Home/allsongs.html", {"songs": Songs.objects.all()})
+    return render(request, "Home/allsongs.html",
+                  {"songs": Songs.objects.all()})
 
 
 def showplaylist(request, **kwargs):
     playlisttoshow = Playlists.objects.filter(id=kwargs["pk"])[0]
-    pic = playlisttoshow.Creator.socialaccount_set.all()[0].extra_data["picture"]
-    return render(
-        request, "Home/ShowPlaylist.html", {"playlist": playlisttoshow, "pic": pic}
-    )
+    pic = playlisttoshow.Creator.socialaccount_set.all(
+    )[0].extra_data["picture"]
+    return render(request, "Home/ShowPlaylist.html", {
+        "playlist": playlisttoshow,
+        "pic": pic
+    })
 
 
 """
@@ -375,5 +389,8 @@ def searchbytag(request):
         return render(
             request,
             "Home/searchbytag.html",
-            {"search_form": search_form, "tags": searchedtags},
+            {
+                "search_form": search_form,
+                "tags": searchedtags
+            },
         )
