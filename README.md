@@ -50,7 +50,7 @@ Run the code in your local machine
 ```
 **You can now view from the port 8000 of localhost :** http://localhost:8000
 
-###If you have Docker runtime installed in your machine, skip steps other than 1,4,7
+### If you have Docker runtime installed in your machine, skip steps other than 1,4,7
 
 9. Start the compose file to run the app in containerized mode
 ```
